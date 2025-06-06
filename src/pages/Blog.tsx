@@ -4,8 +4,13 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { blogs } from '@/data/blogData';
+import { useBlog } from '@/context/BlogProvider';
+import config from '@/config';
+import { format } from 'date-fns';
 
 const Blog = () => {
+  const { allblogs } = useBlog();
+  console.log(allblogs)
   return (
     <div className="pt-0">
       {/* Hero Section */}
@@ -34,9 +39,9 @@ const Blog = () => {
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {blogs.map((blog, index) => (
+            {allblogs.map((blog, index) => (
               <motion.div
-                key={blog.id}
+                key={blog._id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -46,7 +51,7 @@ const Blog = () => {
               >
                 <div className="relative overflow-hidden h-56">
                   <img
-                    src={blog.image}
+                    src={`${config.apiUrl}/${blog.photo}`}
                     alt={blog.title}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                   />
@@ -56,16 +61,31 @@ const Blog = () => {
                 </div>
                 
                 <div className="p-6">
-                  <div className="flex items-center text-sm text-gray-500 mb-3">
-                    <span>{blog.date}</span>
+                  {/* <div className="flex items-center text-sm text-gray-500 mb-3">
+                    <span>{format(new Date(blog.createdAt), 'dd MMM, yyyy')}</span>
                     <span className="mx-2">•</span>
-                    <span>{blog.readTime}</span>
-                  </div>
+                    <span>{blog.about}</span>
+                  </div> */}
+
+      <div className="text-sm text-gray-500 mb-3">
+  <div className="mb-1">
+    <span>{format(new Date(blog.createdAt), 'dd MMM, yyyy')}</span>
+  </div>
+
+  <div className="flex items-start sm:space-x-2 flex-col sm:flex-row">
+    <span className="hidden sm:inline">•</span>
+    <span className="line-clamp-1 sm:line-clamp-2 max-w-full overflow-hidden text-ellipsis">
+      {blog.about}
+    </span>
+  </div>
+</div>
+
+
                   <h3 className="text-xl font-bold text-builder-navy mb-3 line-clamp-2">{blog.title}</h3>
                   <p className="text-gray-600 mb-4 line-clamp-3">{blog.excerpt}</p>
                   
                   <Link 
-                    to={`/blog/${blog.id}`} 
+                    to={`/blog/${blog.slug}/`} 
                     className="inline-flex items-center text-builder-amber font-medium hover:text-builder-amber/80 transition-colors"
                   >
                     Read More <ArrowRight size={16} className="ml-2" />
