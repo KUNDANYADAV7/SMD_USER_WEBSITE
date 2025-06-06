@@ -1,0 +1,12 @@
+/* Apply yellow color to icons and links inside the contact page */
+.contact-page a,
+.contact-page svg {
+  color: #ffc107;
+  transition: color 0.3s ease;
+}
+
+/* Optional: hover effect */
+.contact-page a:hover,
+.contact-page svg:hover {
+  color: #e0a800;
+}
