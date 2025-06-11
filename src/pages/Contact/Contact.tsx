@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -7,6 +7,8 @@ import SectionHeading from '@/components/ui/SectionHeading';
 import CustomButton from '@/components/ui/CustomButton';
 import { MapPin, Phone, Mail, Clock, Check } from 'lucide-react';
 import { toast } from 'sonner';
+import axios from 'axios';
+import emailjs from 'emailjs-com';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -31,24 +33,54 @@ const Contact = () => {
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = async (data: FormValues) => {
-    setIsSubmitting(true);
-    
-    // Simulate API call
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setSubmitted(true);
-      toast.success("Your message has been sent successfully!");
-      reset();
-      setTimeout(() => {
-        setSubmitted(false);
-      }, 5000);
-    } catch (error) {
-      toast.error("There was an error sending your message. Please try again.");
-    } finally {
+
+
+const onSubmit = async (data: FormValues) => {
+  setIsSubmitting(true);
+
+  try {
+    // Step 1: Validate Email
+    const emailCheck = await axios.get(
+      `https://emailvalidation.abstractapi.com/v1/?api_key=${import.meta.env.VITE_EMAIL_VALID_API_KEY}&email=${data.email}`
+    );
+
+    if (emailCheck.data.deliverability !== 'DELIVERABLE') {
+      toast.error("The email address appears to be invalid or non-existent.");
       setIsSubmitting(false);
+      return;
     }
-  };
+
+    // Step 2: Send Email using emailjs
+    const serviceID = import.meta.env.VITE_CONTACT_SERVICE_ID;
+    const templateID = import.meta.env.VITE_CONTACT_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_CONTACT_PUBLIC_KEY;
+
+    const templateParams = {
+      from_name: data.name,
+      from_email: data.email,
+      phone: data.phone,
+      subject: data.subject,
+      message: data.message,
+      to_name: "Techy Builder", // Customize if needed
+      reply_to: data.email,
+    };
+
+    await emailjs.send(serviceID, templateID, templateParams, publicKey);
+
+    setSubmitted(true);
+    toast.success("Your message has been sent successfully!");
+    reset();
+    setTimeout(() => setSubmitted(false), 5000);
+  } catch (error) {
+    console.error(error);
+    toast.error("There was an error sending your message. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
+
 
   const contactInfo = [
     {
@@ -76,7 +108,7 @@ const Contact = () => {
   return (
     <div className="pt-0">
       {/* Hero Section */}
-      <section className="relative py-20 md:py-28 ">
+      <section className="relative py-20 md:py-28 bg-builder-navy">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0  z-10" />
           <div className="absolute inset-0 bg-[url('/photos/12.png')] bg-cover bg-center" />
@@ -168,7 +200,7 @@ const Contact = () => {
                           className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-builder-amber/50 focus:border-builder-amber outline-none transition-colors ${
                             errors.name ? 'border-red-500' : 'border-gray-300'
                           }`}
-                          placeholder="John Doe"
+                          placeholder="Enter Your Name"
                           {...register('name')}
                         />
                         {errors.name && (
@@ -185,7 +217,7 @@ const Contact = () => {
                           className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-builder-amber/50 focus:border-builder-amber outline-none transition-colors ${
                             errors.email ? 'border-red-500' : 'border-gray-300'
                           }`}
-                          placeholder="your@email.com"
+                          placeholder="Enter Your Email"
                           {...register('email')}
                         />
                         {errors.email && (
@@ -205,7 +237,7 @@ const Contact = () => {
                           className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-builder-amber/50 focus:border-builder-amber outline-none transition-colors ${
                             errors.phone ? 'border-red-500' : 'border-gray-300'
                           }`}
-                          placeholder="(123) 456-7890"
+                          placeholder="Enter Your Number"
                           {...register('phone')}
                         />
                         {errors.phone && (

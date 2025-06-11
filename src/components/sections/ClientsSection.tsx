@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import SectionHeading from '@/components/ui/SectionHeading';
 import {
@@ -9,65 +9,22 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "@/components/ui/carousel";
-
-const clients = [
-  {
-    name: 'TechBuild Inc.',
-    logo: '/photos/30.png',
-    description: 'Leading tech company specializing in smart building solutions.',
-    projects: 'Office Headquarters, Research Facility',
-  },
-  {
-    name: 'EcoHomes',
-    logo: '/photos/29.png',
-    description: 'Sustainable housing developer focused on eco-friendly construction.',
-    projects: 'Green Residential Complex, Solar Integration',
-  },
-  {
-    name: 'UrbanScape',
-    logo: '/photos/28.png',
-    description: 'Urban planning and architectural design firm for modern cities.',
-    projects: 'City Center Renovation, Urban Park Development',
-  },
-  {
-    name: 'RetailPrime',
-    logo: '/photos/27.png',
-    description: 'Retail space development company with nationwide presence.',
-    projects: 'Shopping Mall, Flagship Store Designs',
-  },
-  {
-    name: 'IndustrialTech',
-    logo: '/photos/26.png',
-    description: 'Manufacturing facilities and industrial complex developer.',
-    projects: 'Factory Expansion, Warehouse Complex',
-  },
-  {
-    name: 'ArchitectPlus',
-    logo: '/photos/25.png',
-    description: 'Award-winning architectural design studio for innovative structures.',
-    projects: 'Museum Design, Modern Library',
-  },
-  {
-    name: 'CityDevelopers',
-    logo: '/photos/24.png',
-    description: 'Urban development and city planning experts for sustainable growth.',
-    projects: 'Downtown Revitalization, Smart City Integration',
-  },
-];
+import { useTrustedClient } from '@/context/TrustedClientContext';
+import config from '@/config';
 
 const ClientsSection = () => {
   const [api, setApi] = useState<any>(null);
+  const { trustedClients } = useTrustedClient();
   
-  // Auto-scroll functionality
   useEffect(() => {
-    if (!api) return;
-    
+  if (api && trustedClients.length > 0) {
     const interval = setInterval(() => {
       api.scrollNext();
-    }, 5000); // 5 seconds interval
-    
+    }, 5000);
     return () => clearInterval(interval);
-  }, [api]);
+  }
+}, [api, trustedClients]);
+
 
   return (
     <section className="py-10 mt-10 bg-gray-50 overflow-hidden">
@@ -89,7 +46,7 @@ const ClientsSection = () => {
             className="w-full"
           >
             <CarouselContent className="-ml-4">
-              {clients.map((client, index) => (
+              {trustedClients.map((client, index) => (
                 <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
                   <motion.div
                     className="relative w-full h-[300px] rounded-xl overflow-hidden perspective-1000 group transform-gpu"
@@ -107,8 +64,8 @@ const ClientsSection = () => {
                     {/* Full-size image background */}
                     <div className="absolute inset-0 w-full h-full">
                       <img
-                        src={client.logo}
-                        alt={client.name}
+                        src={`${config.apiUrl}/${client.image}`}
+                        alt={client.title}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                       />
                     </div>
@@ -116,11 +73,11 @@ const ClientsSection = () => {
                     {/* Overlay with hover effect */}
                     <div className="absolute inset-0 bg-gradient-to-t from-builder-navy/80 via-builder-navy/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                        <h4 className="text-xl text-sappu">{client.name}</h4>
+                        <h4 className="text-xl text-sappu">{client.category}</h4>
                         <p className="text-sappu text-sm mb-2">{client.description}</p>
                         <div>
                           <span className="text-xs font-medium text-sappu">Projects:</span>
-                          <p className="text-sm text-white/90 text-sappu">{client.projects}</p>
+                          <p className="text-sm text-white/90 text-sappu">{client.title}</p>
                         </div>
                       </div>
                     </div>
@@ -134,6 +91,8 @@ const ClientsSection = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
+
+            
             <div className="hidden md:flex mt-8 justify-center">
               <CarouselPrevious className="relative left-0 right-auto mr-2" />
               <CarouselNext className="relative right-0 left-auto" />
@@ -146,3 +105,6 @@ const ClientsSection = () => {
 };
 
 export default ClientsSection;
+
+
+

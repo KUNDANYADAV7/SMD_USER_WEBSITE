@@ -62,17 +62,20 @@ const ContactInfos = () => {
               </div>
             </div>
 
-            <div className="flex items-start space-x-3 mt-4">
-              <MapPin className="text-yellow-400 mt-1" />
-              <div>
-                <p className="text-sm font-semibold text-gray-300">Our Office:</p>
-                <p className="text-sm">
-                  405 GANGOTRI ICON COMPLEX, Gotri - Vasna Rd, opp.
-                  <br /> GOKUL PARTY PLOT, nr. BANSAL MULTIPLEX, Vadodara, Gujarat 390007
-                  Building District, NY 10001
-                </p>
-              </div>
-            </div>
+          <div className="flex items-start space-x-3 mt-4">
+  <MapPin className="text-yellow-400 w-7 h-7 flex-shrink-0 mt-1.5" />
+  <div>
+    <p className="text-sm font-semibold text-gray-300">Our Office:</p>
+    <p className="text-sm text-gray-200">
+      405 GANGOTRI ICON COMPLEX, Gotri - Vasna Rd, opp.
+      <br />
+      GOKUL PARTY PLOT, nr. BANSAL MULTIPLEX, Vadodara, Gujarat 390007
+      <br />
+      Building District, NY 10001
+    </p>
+  </div>
+</div>
+
           </div>
         </div>
       </div>

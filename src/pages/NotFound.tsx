@@ -1,7 +1,4 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { Home } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import CustomButton from '@/components/ui/CustomButton';
 
 const NotFound = () => {

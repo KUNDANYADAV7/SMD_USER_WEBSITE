@@ -1,20 +1,17 @@
 
-import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { blogs } from '@/data/blogData';
 import { useBlog } from '@/context/BlogProvider';
 import config from '@/config';
 import { format } from 'date-fns';
 
 const Blog = () => {
   const { allblogs } = useBlog();
-  console.log(allblogs)
   return (
     <div className="pt-0">
       {/* Hero Section */}
-      <section className="relative py-20 ">
+      <section className="relative py-20 bg-builder-navy">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-builder-navy/0 z-10" />
           <div className="absolute inset-0 bg-[url('/photos/25.png')] bg-cover bg-center" />
@@ -27,7 +24,7 @@ const Blog = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">Our Blog</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 mt-10">Our Blog</h1>
             <p className="text-white/90 text-lg mb-6">
               Insights, trends, and news from the construction industry
             </p>
@@ -61,11 +58,6 @@ const Blog = () => {
                 </div>
                 
                 <div className="p-6">
-                  {/* <div className="flex items-center text-sm text-gray-500 mb-3">
-                    <span>{format(new Date(blog.createdAt), 'dd MMM, yyyy')}</span>
-                    <span className="mx-2">•</span>
-                    <span>{blog.about}</span>
-                  </div> */}
 
       <div className="text-sm text-gray-500 mb-3">
   <div className="mb-1">

@@ -11,7 +11,7 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <h3 className="text-xl font-bold mb-6">
-              <span className="text-builder-amber">BUILD</span>PRO
+              <span className="text-builder-amber">SMD</span>Engineer
             </h3>
             <p className="text-gray-300 mb-6">
               Quality construction services with over 25 years of experience. Building dreams into reality.
@@ -67,14 +67,19 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-6 heading-underline pb-3">Contact Us</h3>
             <ul className="space-y-4">
-              <li className="flex items-start">
-                <MapPin size={18} className="mr-3 text-builder-amber mt-1" />
-                <span className="text-gray-300">123 Builder Street, Construction City, CC 12345</span>
-              </li>
+              <li className="flex items-start space-x-3">
+  <div className="flex-shrink-0 pt-1">
+    <MapPin size={20} className="text-builder-amber" />
+  </div>
+  <span className="text-gray-300 leading-relaxed">
+    405 GANGOTRI ICON COMPLEX, Gotri - Vasna Rd, opp. GOKUL PARTY PLOT, nr. BANSAL MULTIPLEX, Vadodara, Gujarat 390007
+  </span>
+</li>
+
               <li className="flex items-center">
                 <Phone size={18} className="mr-3 text-builder-amber" />
                 <a href="tel:+11234567890" className="text-gray-300 hover:text-builder-amber transition-colors">
-                  +1 (123) 456-7890
+                  +91 88494 32941
                 </a>
               </li>
               <li className="flex items-center">
@@ -90,10 +95,20 @@ const Footer = () => {
 
       {/* Copyright */}
       <div className="border-t border-gray-800 py-6">
-        <div className="container mx-auto px-4 text-center text-gray-400 text-sm">
-          <p>© {new Date().getFullYear()} BuildPro Construction. All Rights Reserved.</p>
-        </div>
-      </div>
+  <div className="container mx-auto px-4 text-center text-gray-400 text-sm">
+    <p>
+      © {new Date().getFullYear()} SMD ENGINEER. All Rights Reserved. | Built By{" "}
+      <a
+        href="https://techybuilder.in"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[#ffc107] hover:text-white underline transition-colors duration-300"
+      >
+        techybuilder.in
+      </a>
+    </p>
+  </div>
+</div>
     </footer>
   );
 };

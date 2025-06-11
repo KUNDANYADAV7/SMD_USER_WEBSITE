@@ -138,12 +138,12 @@ html, body {
 .bg-white div,
 .bg-white strong,
 .bg-white em {
-  color: black !important;
+  color: black important;
 }
 
-.bg-white * {
+/* .bg-white * {
   color: black !important;
-}
+} */
 
 
 
@@ -274,4 +274,9 @@ form.bg-gray-50 svg { color: #ffc107; }
 
  .font-signika-negative {
   font-family: 'Signika Negative', sans-serif;
+}
+
+
+.custom-title {
+  color: #f0a04b !important;
 }

@@ -1,16 +1,12 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Award, Users, Clock, Star, Mail, Phone } from 'lucide-react';
 import CustomCard from '@/components/ui/CustomCard';
-import CustomButton from '@/components/ui/CustomButton';
 import SectionHeading from '@/components/ui/SectionHeading';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/components/ui/hover-card';
-import CountUp from 'react-countup';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import CountUpNumber from '@/components/CountUpNumber';
-import CountAbout from '@/components/CountAbout';
+import CountAbout from '@/components/CountNumberRun/CountAbout';
 
 const About = () => {
 const location = useLocation();

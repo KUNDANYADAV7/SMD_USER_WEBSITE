@@ -155,7 +155,7 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({
         <motion.p
           className={cn(
             'text-lg max-w-2xl',
-            descriptionColor || (light ? 'text-gray-300' : 'text-white'),
+            descriptionColor || (light ? 'text-gray-300' : 'text-builder-navy'),
             center && 'mx-auto'
           )}
           variants={childVariants}

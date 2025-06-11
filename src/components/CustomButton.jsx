@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react'; // You can use your own SVG if preferred
+import { ArrowRight } from 'lucide-react'; 
 
 const CustomButton = ({ to, children }) => {
   return (
