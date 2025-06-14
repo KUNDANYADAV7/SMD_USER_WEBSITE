@@ -32,7 +32,7 @@ const FeatureCard = ({
         </div>
       </div>
       <h3 className={`${isSelected ? 'text-white' : 'text-white' } group-hover:text-black text-xl font-semi bold mb-3 `}>{title}</h3>
-      <p className={`${isSelected ? 'text-white' : 'text-white'} group-hover:text-black flex-grow`}>{description}</p>
+      <p className={`${isSelected ? 'text-white' : 'text-white'} group-hover:text-black flex-grow line-clamp-4`}>{description}</p>
       
       {link && (
         <div className="mt-6">

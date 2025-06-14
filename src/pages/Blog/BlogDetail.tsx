@@ -84,7 +84,7 @@ const BlogDetail = () => {
               <h1 className="text-3xl md:text-4xl font-bold text-builder-navy mb-6">{blog.title}</h1>
 
               <div className="prose prose-lg max-w-none">
-                <p className="text-gray-700 mb-6">{blog.content}</p>
+                <p className="text-gray-700 mb-6">{blog.about}</p>
                 <p className="text-gray-700 mb-6">
                   At BuildPro, we're committed to staying at the forefront of industry developments...
                 </p>
