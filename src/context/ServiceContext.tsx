@@ -39,11 +39,12 @@ export const ServiceProvider: React.FC<ServiceProviderProps> = ({ children }) =>
       const { data } = await axios.get(`${config.apiUrl}/api/services/all`);
       setServices(data);
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch services",
-        variant: "destructive"
-      });
+      // toast({
+      //   title: "Error",
+      //   description: "Failed to fetch services",
+      //   variant: "destructive"
+      // });
+      return null;
     } finally {
       setLoading(false);
     }

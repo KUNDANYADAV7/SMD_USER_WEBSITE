@@ -278,49 +278,61 @@ const stats = [
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={index}
-                className="text-center"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <HoverCard>
-                  <HoverCardTrigger asChild>
-                    <div className="cursor-pointer transition-transform hover:scale-105">
-                      <img 
-                        src={member.image}
-                        alt={member.name} 
-                        className="w-32 h-32 rounded-full mx-auto mb-4 object-cover" 
-                      />
-                      <h4 className="text-xl font-semibold text-builder-navy">{member.name}</h4>
-                      <p className="text-gray-600">{member.role}</p>
-                    </div>
-                  </HoverCardTrigger>
-                  <HoverCardContent className="w-80 p-4">
-                    <div className="flex justify-between space-x-4">
-                      <div className="space-y-2">
-                        <h4 className="text-xl font-semibold">{member.name}</h4>
-                        <p className="text-sm text-builder-amber font-medium">{member.role}</p>
-                        <p className="text-sm text-gray-600">{member.bio}</p>
-                        <div className="pt-2">
-                          <div className="flex items-center text-sm text-gray-700">
-                            <Mail className="mr-2 h-4 w-4 text-builder-amber" />
-                            <span>{member.email}</span>
-                          </div>
-                          <div className="flex items-center text-sm text-gray-700 mt-2">
-                            <Phone className="mr-2 h-4 w-4 text-builder-amber" />
-                            <span>{member.phone}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </HoverCardContent>
-                </HoverCard>
-              </motion.div>
-            ))}
+            {teamMembers.map((member, index) => {
+  const [open, setOpen] = useState(false); // Local state per card
+
+  const handleToggle = () => {
+    if (window.innerWidth < 768) {
+      setOpen(!open); // Toggle only on mobile
+    }
+  };
+
+  return (
+    <motion.div
+      key={index}
+      className="text-center"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+    >
+      <HoverCard open={open} onOpenChange={setOpen}>
+        <HoverCardTrigger asChild>
+          <div onClick={handleToggle} className="cursor-pointer transition-transform hover:scale-105">
+            <img 
+              src={member.image}
+              alt={member.name} 
+              className="w-32 h-32 rounded-full mx-auto mb-4 object-cover" 
+            />
+            <h4 className="text-xl font-semibold text-builder-navy">{member.name}</h4>
+            <p className="text-gray-600">{member.role}</p>
+          </div>
+        </HoverCardTrigger>
+        <HoverCardContent
+  className="w-[20rem] max-w-[90vw] md:p-4 p-2 rounded-lg border shadow-md bg-white"
+>
+  <div className="space-y-2">
+    <h4 className="text-xl font-semibold">{member.name}</h4>
+    <p className="text-sm text-builder-amber font-medium">{member.role}</p>
+    <p className="text-sm text-gray-600">{member.bio}</p>
+    <div className="pt-2">
+      <div className="flex items-center text-sm text-gray-700">
+        <Mail className="mr-2 h-4 w-4 text-builder-amber" />
+        <span className="break-all">{member.email}</span>
+      </div>
+      <div className="flex items-center text-sm text-gray-700 mt-2">
+        <Phone className="mr-2 h-4 w-4 text-builder-amber" />
+        <span>{member.phone}</span>
+      </div>
+    </div>
+  </div>
+</HoverCardContent>
+
+      </HoverCard>
+    </motion.div>
+  );
+})}
+
           </div>
         </div>
       </section>

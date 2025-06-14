@@ -24,6 +24,8 @@ import config from '@/config';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ServiceProcessSection } from '@/components/ServiceProcessSection';
+import SkeletonServiceSidebar from '@/components/layout/ServiceSkelton/SkeletonServiceSidebar';
+import SkeletonServiceDetail from '@/components/layout/ServiceSkelton/SkeletonServiceDetail';
 
 
 // Updated icon mapper to sync with admin panel
@@ -52,6 +54,7 @@ const getIconByName = (name) => {
 const Services = () => {
   const { services } = useService();
   const [selectedService, setSelectedService] = useState(null);
+  const [loading, setLoading] = useState(true);
 
     const location = useLocation();
 
@@ -62,6 +65,7 @@ const Services = () => {
   if (services && services.length > 0) {
     const matched = services.find(service => service.slug === slugFromQuery);
     setSelectedService(matched || services[0]);
+     setLoading(false);
   }
 }, [services, slugFromQuery]);
 
@@ -92,82 +96,66 @@ const Services = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-20">
-        <div className="container-custom">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            {/* Sidebar */}
-            {/* <div className="lg:col-span-2">
-              <div className="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-100">
-                <h2 className="text-2xl font-bold mb-6 border-b border-gray-200 pb-2">Our Solutions</h2>
-                <div className="space-y-2">
-                  {services.map((service) => (
-                    <ServiceItem
-                      key={service._id}
-                      title={service.title}
-                      isActive={selectedService?.slug === service.slug}
-                      icon={getIconByName(service.iconName)}
-                      onClick={() => setSelectedService(service)}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div> */}
+     <section className="py-20">
+  <div className="container-custom">
+    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+      
+      {/* Sidebar */}
+      <div className="lg:col-span-2">
+        {loading ? (
+          <SkeletonServiceSidebar />
+        ) : (
+          <div className="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-100 h-full">
+            <h2 className="text-2xl font-bold mb-6 border-b border-gray-200 pb-2">
+              Our Solutions
+            </h2>
+            <div className="space-y-2 overflow-y-auto max-h-[370px] pr-2">
+              {services.map((service) => (
+                <ServiceItem
+                  key={service._id}
+                  title={service.title}
+                  isActive={selectedService?.slug === service.slug}
+                  icon={getIconByName(service.iconName)}
+                  onClick={() => setSelectedService(service)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
 
-            {/* Sidebar */}
-<div className="lg:col-span-2">
-  <div className="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-100 h-full">
-    <h2 className="text-2xl font-bold mb-6 border-b border-gray-200 pb-2">
-      Our Solutions
-    </h2>
-    
-    {/* Scrollable container */}
-    <div className="space-y-2 overflow-y-auto max-h-[370px] pr-2">
-      {services.map((service) => (
-        <ServiceItem
-          key={service._id}
-          title={service.title}
-          isActive={selectedService?.slug === service.slug}
-          icon={getIconByName(service.iconName)}
-          onClick={() => setSelectedService(service)}
-        />
-      ))}
+      {/* Main Content */}
+      <div className="lg:col-span-3">
+        {loading || !selectedService ? (
+          <SkeletonServiceDetail />
+        ) : (
+          <div className="bg-white p-8 rounded-lg shadow-md border border-gray-100">
+            <div className="flex items-center mb-6 flex-wrap sm:flex-nowrap">
+              <div className="bg-[#fff9e6] p-4 rounded-full mr-4 text-[#ffc107]">
+                {getIconByName(selectedService.iconName)}
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold break-words max-w-full whitespace-normal">
+                {selectedService.title}
+              </h2>
+            </div>
+
+            <div className="mb-8">
+              <img
+                src={`${config.apiUrl}/${selectedService.serviceImage}`}
+                alt={selectedService.title}
+                className="w-full h-64 object-cover rounded-lg"
+              />
+            </div>
+
+            <p className="text-gray-600 mb-6 text-lg">{selectedService.description}</p>
+            <p className="text-gray-700 mb-8 leading-relaxed">{selectedService.content}</p>
+          </div>
+        )}
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-
-            {/* Main Content */}
-            {selectedService && (
-              <div className="lg:col-span-3">
-                <div className="bg-white p-8 rounded-lg shadow-md border border-gray-100">
-                  <div className="flex items-center mb-6 flex-wrap sm:flex-nowrap">
-                    <div className="bg-[#fff9e6] p-4 rounded-full mr-4">
-                      <div className="text-[#ffc107]">
-                        {getIconByName(selectedService.iconName)}
-                      </div>
-                    </div>
-                    <h2 className="text-2xl md:text-3xl font-bold break-words max-w-full whitespace-normal">
-  {selectedService.title}
-</h2>
-
-                  </div>
-
-                  <div className="mb-8">
-                    <img
-                      src={`${config.apiUrl}/${selectedService.serviceImage}`}
-                      alt={selectedService.title}
-                      className="w-full h-64 object-cover rounded-lg"
-                    />
-                  </div>
-
-                  <p className="text-gray-600 mb-6 text-lg">{selectedService.description}</p>
-                  <p className="text-gray-700 mb-8 leading-relaxed">{selectedService.content}</p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
 
             {/* Process Section */}
    <ServiceProcessSection/>

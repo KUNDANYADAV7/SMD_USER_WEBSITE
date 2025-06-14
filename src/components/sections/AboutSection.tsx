@@ -1,64 +1,70 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from 'react-router-dom';
 import { ArrowRight } from "lucide-react";
+import {Paintbrush, Building2, Hammer, Ruler} from "lucide-react";
 
 interface StatItemProps {
   label: string;
   value: number;
   suffix?: string;
   duration?: number;
+  icon?: React.ElementType;
+
 }
 
-const StatItem = ({ label, value, suffix = "", duration = 2000 }: StatItemProps) => {
+const StatItem = ({ icon: Icon, label, value, suffix = "", duration = 2000 }: StatItemProps) => {
   const [count, setCount] = useState(0);
   const countRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
+useEffect(() => {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      setIsVisible(entry.isIntersecting);
+    },
+    { threshold: 0.1 }
+  );
 
-    if (countRef.current) {
-      observer.observe(countRef.current);
+  if (countRef.current) {
+    observer.observe(countRef.current);
+  }
+
+  return () => {
+    observer.disconnect();
+  };
+}, []);
+
+useEffect(() => {
+  if (!isVisible) {
+    setCount(0); // Reset
+    return;
+  }
+
+  let startTime: number;
+  const step = (timestamp: number) => {
+    if (!startTime) startTime = timestamp;
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+    setCount(Math.floor(progress * value));
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
     }
+  };
 
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+  window.requestAnimationFrame(step);
+}, [value, duration, isVisible]);
 
-  useEffect(() => {
-    if (!isVisible) return;
 
-    let startTime: number;
-    const step = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      setCount(Math.floor(progress * value));
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      }
-    };
-
-    window.requestAnimationFrame(step);
-  }, [value, duration, isVisible]);
-
-  return (
+return (
     <div className="text-center" ref={countRef}>
+      {Icon && <Icon className="w-8 h-8 mx-auto mb-2 stroke-[#f0a04b]" />}
       <div className="text-4xl font-bold mb-1">
         {count}
         {suffix}
       </div>
       <div className="text-gray-600 text-sm">{label}</div>
     </div>
-  );
+);
+
 };
 
 const AboutSection = () => {
@@ -82,18 +88,12 @@ const AboutSection = () => {
               <div className="inline-block rounded-full bg-gray-100 px-4 py-1.5 text-sm font-medium text-gray-800 mb-4">
                 ABOUT OUR COMPANY
               </div>
-              {/* <h2 className="text-4xl md:text-5xl font-bold mb-6 text-center">
-  Welcome To The<br />
-  <span className="block text-center">SMD Engineers</span>
-</h2> */}
+           
 <h2 className="text-4xl md:text-5xl font-semibold text-gray-800 mb-6 animate-slideInLeft">
   Welcome To The<br />
   <span className="block">SMD Engineers</span>
 </h2>
 
-{/* <div className=" text-lg font-semibold text-[#ffc107] mb-4">
-                Where We Build Your Visions
-              </div> */}
               {/* Paragraph + image in same row, but button under paragraph only */}
               <div className="flex flex-col md:flex-row items-start gap-6">
                 {/* Text + button column */}
@@ -129,7 +129,7 @@ const AboutSection = () => {
                 </div>
 
                 {/* Right image */}
-                <div className="flex-shrink-0">
+                <div className="w-full">
                   <img
                     src="/photos/about_right.png"
                     alt="Construction right"
@@ -141,12 +141,13 @@ const AboutSection = () => {
 
            {/* Bottom stats section */}
 <div className="mt-8 flex flex-col md:flex-row gap-3 items-center">
-  <div className="w-full md:w-[80%] h-20 bg-gray-50 rounded-xl flex items-center justify-around px-4">
-    <StatItem label="Designing/Planning" value={80} suffix="+" />
-    <StatItem label="Construction " value={11} suffix="+" />
-    <StatItem label="Renovation" value={18} suffix="+" />
-    <StatItem label="Interior" value={12} />
-  </div>
+ <div className="w-full md:w-[80%] bg-gray-50 rounded-xl px-4 py-4 grid grid-cols-2 md:grid-cols-4 gap-y-4 text-center">
+  <StatItem icon={Ruler} label="Designing/Planning" value={80} suffix="+" />
+  <StatItem icon={Building2} label="Construction " value={11} suffix="+" />
+  <StatItem icon={Hammer} label="Renovation" value={18} suffix="+" />
+  <StatItem icon={Paintbrush} label="Interior" value={12} suffix="+" />
+</div>
+
 </div>
 
           </div>

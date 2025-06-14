@@ -45,11 +45,12 @@ export const BlogProvider: React.FC<BlogProviderProps> = ({ children }) => {
       });
       setAllBlogs(data);
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to load all blogs",
-        variant: "destructive"
-      });
+      // toast({
+      //   title: "Error",
+      //   description: "Failed to load all blogs",
+      //   variant: "destructive"
+      // });
+      return null;
     } finally {
       setLoading(false);
     }

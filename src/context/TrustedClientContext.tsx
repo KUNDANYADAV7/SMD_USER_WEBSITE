@@ -44,10 +44,11 @@ export const TrustedClientProvider: React.FC<TrustedClientProviderProps> = ({ ch
       const { data } = await axios.get(`${config.apiUrl}/api/trustedClient/all`);
       setTrustedClients(data);
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to load trusted clients.",
-      });
+      // toast({
+      //   title: "Error",
+      //   description: "Failed to load trusted clients.",
+      // });
+      return null;
     } finally {
       setLoading(false);
     }

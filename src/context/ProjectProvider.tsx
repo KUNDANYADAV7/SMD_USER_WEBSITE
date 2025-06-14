@@ -42,11 +42,12 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({ children }) =>
       const { data } = await axios.get(`${config.apiUrl}/api/projects/all`);
       setProjects(data);
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch projects",
-        variant: "destructive"
-      });
+      // toast({
+      //   title: "Error",
+      //   description: "Failed to fetch projects",
+      //   variant: "destructive"
+      // });
+      return null;
     } finally {
       setLoading(false);
     }
@@ -76,11 +77,11 @@ export const ProjectProvider: React.FC<ProjectProviderProps> = ({ children }) =>
       const { data } = await axios.get(`${config.apiUrl}/api/projects/slug/${slug}`);
       return data;
     } catch (error) {
-       toast({
-        title: "Error",
-        description: "Failed to fetch project by slug",
-        variant: "destructive"
-      });
+      //  toast({
+      //   title: "Error",
+      //   description: "Failed to fetch project by slug",
+      //   variant: "destructive"
+      // });
       return null;
     } finally {
       setLoading(false);

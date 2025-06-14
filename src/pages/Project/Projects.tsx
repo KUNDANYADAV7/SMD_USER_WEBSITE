@@ -3,21 +3,29 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useProject } from "@/context/ProjectProvider";
 import config from "@/config";
+import { useEffect, useState } from "react";
+import SkeletonProjectCard from "@/components/layout/SkeletonProjectCard";
 
 const Projects = () => {
   const navigate = useNavigate();
   const { projects } = useProject();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (projects && projects.length > 0) {
+      setLoading(false);
+    }
+  }, [projects]);
 
   const getImageUrl = (url: string) =>
     url?.startsWith("http") ? url : `${config.apiUrl}/${url}`;
 
-const groupedProjects = {
-  all: projects,
-  ongoing: projects.filter((p) => p.status?.toLowerCase() === "ongoing"),
-  completed: projects.filter((p) => p.status?.toLowerCase() === "completed"),
-  upcoming: projects.filter((p) => p.status?.toLowerCase() === "upcoming"),
-};
-
+  const groupedProjects = {
+    all: projects,
+    ongoing: projects.filter((p) => p.status?.toLowerCase() === "ongoing"),
+    completed: projects.filter((p) => p.status?.toLowerCase() === "completed"),
+    upcoming: projects.filter((p) => p.status?.toLowerCase() === "upcoming"),
+  };
 
   const TAB_LABELS: Record<keyof typeof groupedProjects, string> = {
     all: "All",
@@ -76,6 +84,18 @@ const groupedProjects = {
           <h3 className="text-xl font-bold text-white mb-3">{project.title}</h3>
           <p className="text-gray-300 text-sm leading-relaxed line-clamp-2">{project.description}</p>
 
+          <div className="mt-4">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/project/${project.slug}`);
+              }}
+              className="text-important-yellow hover:underline font-medium text-sm"
+            >
+              Read More →
+            </button>
+          </div>
+
           {type === "ongoing" && project.progress && (
             <div className="mt-4">
               <div className="flex justify-between text-sm text-gray-400 mb-2">
@@ -120,98 +140,43 @@ const groupedProjects = {
 
       <div className="max-w-7xl mx-auto px-6 py-20">
         <Tabs defaultValue="all" className="w-full">
-         
+          <TabsList className="flex overflow-x-auto scrollbar-hide justify-start md:justify-center gap-4 md:gap-6 mb-8 md:mb-12 bg-transparent border-none shadow-none px-2 md:px-0">
+            {Object.entries(TAB_LABELS).map(([key, label]) => (
+              <TabsTrigger asChild key={key} value={key}>
+                <motion.button
+                  whileHover={{ rotate: 5, scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                  className={`
+                    relative whitespace-nowrap px-4 py-2 text-sm md:text-lg font-medium text-gray-400
+                    transition-all duration-300 ease-in-out
+                    hover:text-[#ffc107] data-[state=active]:text-black
 
-          {/* <TabsList className="flex justify-center gap-6 mb-12 bg-transparent border-none shadow-none">
-  {Object.entries(TAB_LABELS).map(([key, label]) => (
-    <TabsTrigger
-      key={key}
-      value={key}
-      className={`
-        relative px-1 py-2 text-lg font-semibold text-gray-400 transition-colors duration-300
-        hover:text-[#ffc107]
-        data-[state=active]:text-black
-        after:content-['']
-        after:absolute after:left-0 after:-bottom-1 after:h-1 after:rounded-full
-        after:bg-[#ffc107] after:transition-all after:duration-300
-        after:scale-x-0 data-[state=active]:after:scale-x-100
-        after:w-full origin-center
-      `}
-    >
-      {label} Projects
-    </TabsTrigger>
-  ))}
-</TabsList> */}
-
-{/* <TabsList className="flex justify-center gap-6 mb-12 bg-transparent border-none shadow-none">
-  {Object.entries(TAB_LABELS).map(([key, label]) => (
-    <motion.div
-      whileHover={{ rotate: 5 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className="relative"
-      key={key}
-    >
-      <TabsTrigger
-        value={key}
-        className={`
-          relative px-3 py-2 text-lg font-semibold text-gray-400
-          transition-colors duration-300 ease-in-out
-          hover:text-[#ffc107]
-          data-[state=active]:text-black
-          after:content-['']
-          after:absolute after:left-0 after:-bottom-1 after:h-1 after:rounded-full
-          after:bg-[#ffc107] after:transition-all after:duration-300
-          after:scale-x-0 data-[state=active]:after:scale-x-100
-          after:w-full origin-center
-        `}
-      >
-        {label} Projects
-      </TabsTrigger>
-    </motion.div>
-  ))}
-</TabsList> */}
-
-
-<TabsList className="flex justify-center gap-6 mb-12 bg-transparent border-none shadow-none">
-  {Object.entries(TAB_LABELS).map(([key, label]) => (
-    <TabsTrigger
-      asChild
-      key={key}
-      value={key}
-    >
-      <motion.button
-        whileHover={{
-          rotate: 5,
-          scale: 1.05,
-        }}
-        transition={{ type: "spring", stiffness: 200, damping: 15 }}
-        className={`
-          relative px-5 py-2 text-lg font-semibold text-gray-400
-          transition-all duration-300 ease-in-out
-          hover:text-[#ffc107] data-[state=active]:text-black
-
-          after:content-['']
-          after:absolute after:left-0 after:bottom-0
-          after:h-[3px] after:w-full
-          after:bg-[#ffc107] after:scale-x-0
-          after:origin-center
-          after:transition-transform after:duration-300
-          hover:after:scale-x-100
-          data-[state=active]:after:scale-x-100
-        `}
-      >
-        {label} Projects
-      </motion.button>
-    </TabsTrigger>
-  ))}
-</TabsList>
+                    after:content-['']
+                    after:absolute after:left-0 after:bottom-0
+                    after:h-[2px] md:after:h-[3px] after:w-full
+                    after:bg-[#ffc107] after:scale-x-0
+                    after:origin-center
+                    after:transition-transform after:duration-300
+                    hover:after:scale-x-100
+                    data-[state=active]:after:scale-x-100
+                  `}
+                >
+                  {label} Projects
+                </motion.button>
+              </TabsTrigger>
+            ))}
+          </TabsList>
 
           {Object.entries(groupedProjects).map(([key, projectList]) => (
             <TabsContent key={key} value={key} className="space-y-8">
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {projectList.map((project) =>
-                  renderProjectCard(project, key as keyof typeof groupedProjects)
-                )}
+                {loading
+                  ? Array.from({ length: 6 }).map((_, i) => (
+                      <SkeletonProjectCard key={i} />
+                    ))
+                  : projectList.map((project) =>
+                      renderProjectCard(project, key as keyof typeof groupedProjects)
+                    )}
               </div>
             </TabsContent>
           ))}
@@ -222,7 +187,3 @@ const groupedProjects = {
 };
 
 export default Projects;
-
-
-
-
